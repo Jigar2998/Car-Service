@@ -11,7 +11,7 @@ class customer(models.Model):
     gender = models.CharField(max_length=7)
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=20)
-
+    image = models.ImageField(upload_to='images/') 
 
     def __str__(self):
         return self.fname   
@@ -27,7 +27,6 @@ class mechanic(models.Model):
     salary = models.FloatField(max_length=10)
     address = models.CharField(max_length=50)
     password = models.CharField(max_length=20)
-    
 
     def __str__(self):
         return self.fname

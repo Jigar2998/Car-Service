@@ -7,6 +7,7 @@ import math
 import smtplib
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 import csv
 import string
 from random import *
@@ -52,7 +53,7 @@ def customerbase(request):
     return render(request,"car/customerindex.html")
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.FILES['image']:
         try:
             if customer.objects.get(email = request.POST['email']):
                 mail = "Already Registered with this email!"
@@ -64,14 +65,19 @@ def register(request):
             mobile = request.POST.get('mobile_no')
             gender = request.POST.get('gender')
             address = request.POST.get('address')
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
 
             char = string.ascii_letters + string.digits
             password ="".join(choice(char) for x in range(randint(6,10)))
 
-            reg = customer(fname = fname,lname=lname,email=email,mobile=mobile,gender=gender,address=address,password=password)
+            reg = customer(fname = fname,lname=lname,email=email,mobile=mobile,gender=gender,address=address,password=password,image=myfile)
             reg.save()
             stu = customer.objects.all()
-            text = "Your Password Will be sent on Your registered Email-id"
+            text = "Your Password Will be Sent on Your registered Email-id"
             send_mail('Car Care Center', f'You Are registered Successfuly in Our System!\n Email-id is: {email}\n Passowrd is : {password}', 'jigarramani40@gmail.com', [f'{email}'])
             return render(request,"car/customerregister.html",{"text":text})
     else:
@@ -94,13 +100,21 @@ def customerlogin(request):
 
 def cust_edit_profile(request):
     if request.method == 'POST':
-        if 'user' in request.session:
+        if 'user' in request.session and request.FILES['image']:
             cust = customer.objects.get(fname = request.session['user'])
-            fname = request.POST.get('name')
+            fname = request.POST.get('fname')
+            lname = request.POST.get('lname')
             email = request.POST.get('email')
-            enquiry = customer.objects.all().filter(id=cust.id).update(fname=fname,email=email)
-            enquiry.save()
-            return render(request,'car/customer_profile.html',{'user':cust,'stu':enquiry})
+            gender = request.POST.get('gender')
+            address = request.POST.get('address')
+            mobile = request.POST.get('mobile')
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+            enquiry = customer.objects.all().filter(id=cust.id).update(fname=fname,lname=lname,email=email,gender=gender,address=address,mobile=mobile,image=myfile)
+            request.session['user'] = fname
+            return redirect('customer_profile')
         else:
             return redirect('customerlogin')
         
@@ -108,7 +122,8 @@ def cust_edit_profile(request):
         if 'user' in request.session:
             cust = customer.objects.get(fname = request.session['user'])
             return render(request,'car/cust_profile_edit.html',{'user':cust})
-
+        else:
+            return redirect('customerlogin')
 
 
 def customer_feedback(request):
@@ -203,7 +218,7 @@ def customer_view_approved_request(request):
 def customer_approved_request_bill(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        enqiry = cus_request.objects.all().filter(Customer_id = cust.id).exclude(status='Pending')
+        enqiry = cus_request.objects.all().filter(Customer_id = cust.id, status = "Repairing Done")
         return render(request,"car/customer_view_approved_request_bill.html",{"user":cust,"enquiry":enqiry})
     else:
         return render('customerlogin')

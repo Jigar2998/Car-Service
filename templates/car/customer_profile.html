@@ -53,7 +53,7 @@
                             <div class="dashboard">
                                 <div class="dashboard__profile card profile-card">
                                     <div class="card-body profile-card__body">
-                                        <div class="profile-card__avatar"><img src="{% static "images/avatars/avatar-4.jpg" %}" alt="">
+                                        <div class="profile-card__avatar"><img width="150px" height="100px" src="{{stu.image.url}}" alt="">
                                         </div>
                                         <div class="profile-card__name">{{stu.fname}}</div>
                                         <div class="profile-card__email">{{stu.email}}</div>
@@ -76,7 +76,7 @@
                                             <div class="address-card__row-title">Email Address</div>
                                             <div class="address-card__row-content">{{stu.email}}</div>
                                         </div>
-                                        <div class="address-card__footer"><a href="/cust_edit_profile">Edit Address</a></div>
+                                        <div class="address-card__footer">{{stu.address}}<br><a href="/cust_edit_profile">Edit Address</a></div>
                                     </div>
                                 </div>
                                 <div class="dashboard__orders card">

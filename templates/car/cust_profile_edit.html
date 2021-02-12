@@ -62,22 +62,64 @@
                         <div class="card flex-grow-1 mb-md-0 mr-0 mr-lg-3 ml-0 ml-lg-4">
                             <div class="card-body card-body--padding--2">
                                 <h3 class="card-title">Update Profile</h3>
-                                <form method="POST">
+                                <form method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    <div class="form-group input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                    <div class="row">
+                                        <div class="form-group input-group col-md-6">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                            </div>
+                                            <input name="fname" id="fname" class="form-control" placeholder="First name" value="{{user.fname}}" type="text">
                                         </div>
-                                        <input class="form-control" placeholder="Enter Your Full Name" type="text" name="name" id="name">
+                                        <!-- form-group// -->
+                                        <div class="form-group input-group col-md-6">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                            </div>
+                                            <input name="lname" id="lname" class="form-control" placeholder="Last name" value="{{user.lname}}" type="text">
+                                        </div>
+                                        <!-- form-group// -->
                                     </div>
                                     <!-- form-group// -->
-
                                     <div class="form-group input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                                         </div>
-                                        <input class="form-control" placeholder="Enter Your Email Address" name="email" type="email" id="email">
+                                        <input class="form-control" placeholder="Enter Your Email Address" name="email" type="email" value="{{user.email}}" id="email">
                                     </div>  
+                                     <!-- form-group// -->
+                                     <div class="form-group input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                                        </div>
+                                        <select class="custom-select" style="max-width: 70px;">
+											<option selected="">+91</option>
+										</select>
+                                        <input name="mobile" id="mobile" class="form-control" value="{{user.mobile}}" placeholder="Phone number">
+                                    </div>
+                                    <!-- form-group// -->
+                                    <div class="form-group input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"> <i class="fa fa-venus-double"></i> </span>
+                                        </div>
+                                        <select name="gender" class="form-control">
+											<option selected="" value="{{user.gender}}" disabled>Gender</option>
+											<option>Male</option>
+											<option>Female</option>
+											<option>Other</option>
+										</select>
+                                    </div>
+                                    <!-- form-group end.// -->
+                                    <div class="form-group input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+                                        </div>
+                                        <input name="address" id="address" class="form-control" placeholder="Address" value="{{user.address}}" type="address">
+                                    </div>
+                                    <div class="form-group input-group">
+                                        
+                                        <input name="image" id="image" class="form-control" value="{{user.image.url}}" type="file">
+                                    </div>
                                     <!-- form-group// -->
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary btn-block"> Submit	

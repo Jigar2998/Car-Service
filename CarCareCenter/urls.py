@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from CCC import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -43,7 +45,7 @@ urlpatterns = [
     path("customer_logout",views.customer_logout,name="customer_logout"),
     path("del_customer_request/<int:id>",views.del_customer_request,name='del_customer_request'),
     path('customer_feedback',views.customer_feedback),
-    path("customer_profile",views.customer_profile),
+    path("customer_profile",views.customer_profile,name='customer_profile'),
     path('cust_edit_profile',views.cust_edit_profile,name="cust_edit_profile"),
     path('forgotpassword',views.forgotpassword,name='forgotpassword'),
     path('check_otp',views.check_otp,name="check_otp"),
@@ -63,3 +65,5 @@ urlpatterns = [
     path('leave_status',views.leave_status,name='leave_status'),
    
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
